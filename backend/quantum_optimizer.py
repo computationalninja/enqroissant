@@ -1,7 +1,7 @@
 """
 Quantum Optimizer using Qiskit QAOA for routing and allocation problems
 """
-import numpy as np
+# import numpy as np (Removed unused dependency causing install issues)
 import random
 
 # Try to import Qiskit components, fallback to simulation if not available

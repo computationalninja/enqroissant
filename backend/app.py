@@ -8,8 +8,20 @@ import io
 from datetime import datetime, timedelta
 from quantum_optimizer import QuantumOptimizer
 
-import google.generativeai as genai
-from elevenlabs.client import ElevenLabs
+try:
+    import google.generativeai as genai
+    GEMINI_IMPORT_SUCCESS = True
+except ImportError:
+    GEMINI_IMPORT_SUCCESS = False
+    print("Warning: google-generativeai not installed")
+
+try:
+    from elevenlabs.client import ElevenLabs
+    ELEVENLABS_IMPORT_SUCCESS = True
+except ImportError:
+    ELEVENLABS_IMPORT_SUCCESS = False
+    print("Warning: elevenlabs not installed")
+
 
 app = Flask(__name__)
 # Configure CORS to allow all origins for development
@@ -23,7 +35,7 @@ GEMINI_API_KEY = "YOUR_GEMINI_KEY"
 ELEVENLABS_API_KEY = "YOUR_ELEVENLABS_KEY"
 
 try:
-    if GEMINI_API_KEY and GEMINI_API_KEY != "YOUR_GEMINI_KEY":
+    if GEMINI_IMPORT_SUCCESS and GEMINI_API_KEY and GEMINI_API_KEY != "YOUR_GEMINI_KEY":
         genai.configure(api_key=GEMINI_API_KEY)
         gemini_model = genai.GenerativeModel('gemini-pro')
         GEMINI_AVAILABLE = True
@@ -34,7 +46,7 @@ except Exception as e:
     print(f"Warning: Gemini API not available: {e}")
 
 try:
-    if ELEVENLABS_API_KEY and ELEVENLABS_API_KEY != "YOUR_ELEVENLABS_KEY":
+    if ELEVENLABS_IMPORT_SUCCESS and ELEVENLABS_API_KEY and ELEVENLABS_API_KEY != "YOUR_ELEVENLABS_KEY":
         eleven = ElevenLabs(api_key=ELEVENLABS_API_KEY)
         ELEVENLABS_AVAILABLE = True
     else:
